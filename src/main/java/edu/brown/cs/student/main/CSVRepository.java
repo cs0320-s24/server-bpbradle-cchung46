@@ -25,6 +25,7 @@ public class CSVRepository {
 
             this.parser = new Parser<>(reader, creator, true);
             this.searcher = new Searcher(parser);
+            this.csvloaded = true;
         }
         catch (BadCSVException e) {
             // sob

@@ -2,8 +2,12 @@ package edu.brown.cs.student.main.server;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import edu.brown.cs.student.main.server.state.ServerState;
 import edu.brown.cs.student.main.exceptions.BadCSVException;
+import edu.brown.cs.student.main.server.state.ServerState;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -16,20 +20,29 @@ public class LoadCSVHandler implements Route {
   }
 
   @Override
-  public Object handle(Request request, Response response) throws Exception {
+  public Object handle(Request request, Response response) {
     String filepath = request.queryParams("filepath");
+    Map<String, Object> responseMap = new HashMap<>();
+
     try {
       state.load(filepath);
-      return new LoadSuccessResponse(filepath).serialize();
-    } catch (BadCSVException e) {
-      // do something
+    }
+    catch (BadCSVException e) {
+      state.logError(e);
       return new LoadFailureResponse().serialize();
     }
+    catch (FileNotFoundException e) {
+      state.logError(e);
+      return new LoadFailureResponse("error_datasource").serialize();
+    }
+
+    responseMap.put("filepath", filepath);
+    return new LoadSuccessResponse(responseMap).serialize();
   }
 
-  public record LoadSuccessResponse(String response_type, String filepath) {
-    public LoadSuccessResponse(String filepath) {
-      this("success", filepath);
+  public record LoadSuccessResponse(String response_type, Map<String, Object> responseMap) {
+    public LoadSuccessResponse(Map<String, Object> responseMap) {
+      this("success", responseMap);
     }
 
     String serialize() {

@@ -17,19 +17,13 @@ public class CSVRepository {
     this.csvloaded = false;
   }
 
-  public void loadCSV(String filepath) {
-    try {
+  public void loadCSV(String filepath) throws BadCSVException, FileNotFoundException {
       FileReader reader = new FileReader(filepath);
       RowCreator creator = new RowCreator();
 
       this.parser = new Parser<>(reader, creator, true);
       this.searcher = new Searcher(parser);
       this.csvloaded = true;
-    } catch (BadCSVException e) {
-      // sob
-    } catch (FileNotFoundException e) {
-      // cry :)
-    }
   }
 
   public void searchCSV(String value, String identifier) throws BadCSVException {

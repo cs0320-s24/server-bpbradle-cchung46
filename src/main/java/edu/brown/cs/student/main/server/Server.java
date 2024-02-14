@@ -2,16 +2,15 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
-import edu.brown.cs.student.main.DataProxy;
 import edu.brown.cs.student.main.ServerState;
 import spark.Spark;
 
 public class Server {
 
     static final int port = 3232;
-    private final DataProxy state;
+    private final ServerState state;
 
-    public Server(DataProxy state) {
+    public Server(ServerState state) {
 
         this.state = state;
 
@@ -31,7 +30,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        Server server = new Server(new DataProxy());
+        Server server = new Server(new ServerState());
         System.out.println("Server started at http://localhost:" + port);
     }
 }

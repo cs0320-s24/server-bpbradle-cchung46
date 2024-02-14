@@ -2,7 +2,7 @@ package edu.brown.cs.student.main.server;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import edu.brown.cs.student.main.ServerState;
+import edu.brown.cs.student.main.server.state.ServerState;
 import edu.brown.cs.student.main.exceptions.BadCSVException;
 import spark.Request;
 import spark.Response;

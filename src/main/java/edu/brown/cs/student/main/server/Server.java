@@ -2,8 +2,8 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
-import edu.brown.cs.student.main.ACSRepository;
-import edu.brown.cs.student.main.ServerState;
+import edu.brown.cs.student.main.server.state.ACSRepository;
+import edu.brown.cs.student.main.server.state.ServerState;
 import spark.Spark;
 
 public class Server {

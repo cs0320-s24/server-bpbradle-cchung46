@@ -1,6 +1,8 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.server.state;
 
 import edu.brown.cs.student.main.exceptions.BadCSVException;
+import edu.brown.cs.student.main.server.state.ACSRepositoryInterface;
+import edu.brown.cs.student.main.server.state.CSVRepository;
 
 public class ServerState {
   private CSVRepository csvrepo;

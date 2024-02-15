@@ -12,7 +12,6 @@ import java.util.List;
  */
 public class Searcher {
   Parser<List<String>> parser;
-  List<List<String>> retval;
 
   /**
    * Simple constructor that takes in a parser returning List<String> as its Object Type.
@@ -21,7 +20,6 @@ public class Searcher {
    */
   public Searcher(Parser<List<String>> parser) {
     this.parser = parser;
-    this.retval = new ArrayList<>();
   }
 
   /**
@@ -50,6 +48,7 @@ public class Searcher {
    * @param idx the index of the column the user wants to search within
    */
   public List<List<String>> search(String value, int idx) {
+    List<List<String>> retval = new ArrayList<>();
 
     // iterates through the parsed data, converts both strings to compare to lowercase,
     // and checks if value is a substr of the data value.
@@ -57,7 +56,7 @@ public class Searcher {
       String toMatch = row.get(idx).toLowerCase();
 
       if (toMatch.contains(value.toLowerCase())) {
-        this.retval.add(row);
+        retval.add(row);
       }
     }
 
@@ -73,13 +72,14 @@ public class Searcher {
    * @param value what the user is searching for
    */
   public List<List<String>> search(String value) {
+    List<List<String>> retval = new ArrayList<>();
 
     // iterates through rows, then each word in the row and checks for a match based on rules above.
     for (List<String> row : this.parser.getObjs()) {
       for (String word : row) {
         String toMatch = word.toLowerCase();
         if (toMatch.contains(value.toLowerCase())) {
-          this.retval.add(row);
+          retval.add(row);
 
           // avoids printing the same row twice if a match is found twice in one row.
           break;

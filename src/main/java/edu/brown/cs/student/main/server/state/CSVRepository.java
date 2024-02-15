@@ -18,16 +18,24 @@ public class CSVRepository {
   }
 
   public void loadCSV(String filepath) throws BadCSVException, FileNotFoundException {
-      FileReader reader = new FileReader(filepath);
-      RowCreator creator = new RowCreator();
+    FileReader reader = new FileReader(filepath);
+    RowCreator creator = new RowCreator();
 
-      this.parser = new Parser<>(reader, creator, true);
-      this.searcher = new Searcher(parser);
-      this.csvloaded = true;
+    this.parser = new Parser<>(reader, creator, true);
+    this.searcher = new Searcher(parser);
+    this.csvloaded = true;
   }
 
-  public void searchCSV(String value, String identifier) throws BadCSVException {
-    this.searcher.search(value, identifier);
+  public List<List<String>> searchCSV(String val, String col) throws BadCSVException {
+    return this.searcher.search(val, col);
+  }
+
+  public List<List<String>> searchCSV(String val, int col) throws BadCSVException {
+    return this.searcher.search(val, col);
+  }
+
+  public List<List<String>> searchCSV(String val) throws BadCSVException {
+    return this.searcher.search(val);
   }
 
   public void viewCSV() {}

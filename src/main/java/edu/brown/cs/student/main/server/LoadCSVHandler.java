@@ -4,7 +4,6 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.main.exceptions.BadCSVException;
 import edu.brown.cs.student.main.server.state.ServerState;
-
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,7 @@ import spark.Response;
 import spark.Route;
 
 public class LoadCSVHandler implements Route {
-  ServerState state;
+  private final ServerState state;
 
   public LoadCSVHandler(ServerState state) {
     this.state = state;
@@ -26,12 +25,7 @@ public class LoadCSVHandler implements Route {
 
     try {
       state.load(filepath);
-    }
-    catch (BadCSVException e) {
-      state.logError(e);
-      return new LoadFailureResponse().serialize();
-    }
-    catch (FileNotFoundException e) {
+    } catch (BadCSVException | FileNotFoundException e) {
       state.logError(e);
       return new LoadFailureResponse("error_datasource").serialize();
     }

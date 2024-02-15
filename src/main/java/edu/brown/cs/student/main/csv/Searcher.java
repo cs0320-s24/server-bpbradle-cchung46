@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.csv;
 
 import edu.brown.cs.student.main.exceptions.BadCSVException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ import java.util.List;
  */
 public class Searcher {
   Parser<List<String>> parser;
+  List<List<String>> retval;
 
   /**
    * Simple constructor that takes in a parser returning List<String> as its Object Type.
@@ -19,6 +21,7 @@ public class Searcher {
    */
   public Searcher(Parser<List<String>> parser) {
     this.parser = parser;
+    this.retval = new ArrayList<>();
   }
 
   /**
@@ -29,11 +32,11 @@ public class Searcher {
    * @throws BadCSVException if any errors occur while parsing, primarily if the given column
    *     doesn't exist
    */
-  public void search(String value, String column) throws BadCSVException {
+  public List<List<String>> search(String value, String column) throws BadCSVException {
     int idx = parser.getIdx(column);
 
     // once the index is found, calls search with the index
-    search(value, idx);
+    return search(value, idx);
   }
 
   /**
@@ -46,22 +49,19 @@ public class Searcher {
    * @param value what the user is searching for
    * @param idx the index of the column the user wants to search within
    */
-  public void search(String value, int idx) {
-    boolean found = false;
+  public List<List<String>> search(String value, int idx) {
 
     // iterates through the parsed data, converts both strings to compare to lowercase,
     // and checks if value is a substr of the data value.
     for (List<String> row : this.parser.getObjs()) {
       String toMatch = row.get(idx).toLowerCase();
+
       if (toMatch.contains(value.toLowerCase())) {
-        found = true;
-        printRow(row);
+        this.retval.add(row);
       }
     }
 
-    if (!found) {
-      System.out.println("No match found.");
-    }
+    return retval;
   }
 
   /**
@@ -72,16 +72,14 @@ public class Searcher {
    *
    * @param value what the user is searching for
    */
-  public void search(String value) {
-    boolean found = false;
+  public List<List<String>> search(String value) {
 
     // iterates through rows, then each word in the row and checks for a match based on rules above.
     for (List<String> row : this.parser.getObjs()) {
       for (String word : row) {
         String toMatch = word.toLowerCase();
         if (toMatch.contains(value.toLowerCase())) {
-          found = true;
-          printRow(row);
+          this.retval.add(row);
 
           // avoids printing the same row twice if a match is found twice in one row.
           break;
@@ -89,14 +87,6 @@ public class Searcher {
       }
     }
 
-    if (!found) {
-      System.out.println("No match found.");
-    }
-  }
-
-  // private print function that prints the rows split on a comma.
-  private void printRow(List<String> row) {
-    String toPrint = String.join(",", row);
-    System.out.println(toPrint);
+    return retval;
   }
 }

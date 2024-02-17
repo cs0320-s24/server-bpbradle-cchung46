@@ -89,6 +89,16 @@ public class ACSAPIUtilities {
     }
   }
 
+  public static List<List<String>> deserializeBroadbandData(String jsonList) throws IOException, JsonDataException {
+    Moshi moshi = new Moshi.Builder().build();
+    Type listType = Types.newParameterizedType(List.class, String.class);
+    JsonAdapter<List<List<String>>> adapter = moshi.adapter(listType);
+
+    List<List<String>> deserializedData = adapter.fromJson(jsonList);
+
+    return deserializedData;
+  }
+
   public static String readInJson(String filepath) {
     try {
       return new String(Files.readAllBytes(Paths.get(filepath)));

@@ -25,7 +25,7 @@ public class LoadCSVHandler implements Route {
     if (filepath.matches(".*\\.\\./.*")) {
       return new LoadFailureResponse("error_datasource").serialize();
     }
-    
+
     String path = "./data/" + filepath;
 
     Map<String, Object> responseMap = new HashMap<>();

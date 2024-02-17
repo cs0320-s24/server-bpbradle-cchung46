@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ACSRepositoryInterface {
 
-  public List<String> fetch(String s1, String s2) throws URISyntaxException, IOException, InterruptedException;
+  public List<String> fetch(String s1, String s2)
+      throws URISyntaxException, IOException, InterruptedException;
 }

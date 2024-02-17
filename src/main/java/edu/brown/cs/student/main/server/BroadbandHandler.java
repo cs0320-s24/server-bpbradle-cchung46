@@ -3,7 +3,10 @@ package edu.brown.cs.student.main.server;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.main.server.state.ServerState;
+<<<<<<< HEAD:src/main/java/edu/brown/cs/student/main/server/BroadbandHandler.java
 
+=======
+>>>>>>> main:src/main/java/edu/brown/cs/student/main/server/FetchACSHandler.java
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;

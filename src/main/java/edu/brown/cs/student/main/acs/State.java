@@ -1,10 +1,10 @@
-package edu.brown.cs.student.main.activity;
+package edu.brown.cs.student.main.acs;
 
 public class State {
   private String name;
-  private int code;
+  private String code;
 
-  public State(String name, int code) {
+  public State(String name, String code) {
     this.name = name;
     this.code = code;
   }
@@ -13,7 +13,7 @@ public class State {
     return this.name;
   }
 
-  public int getStateCode() {
+  public String getStateCode() {
     return this.code;
   }
 

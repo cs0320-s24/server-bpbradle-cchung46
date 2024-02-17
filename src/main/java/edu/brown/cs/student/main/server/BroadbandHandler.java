@@ -18,24 +18,24 @@ import spark.Route;
 
 public class BroadbandHandler implements Route {
   
-  private final ServerState serverState;
+  private final ServerState state;
 
   public BroadbandHandler(ServerState state) {
-    this.serverState = state;
+    this.state = state;
   }
 
   @Override
   public Object handle(Request request, Response response) {
-    String state = request.queryParams("state");
-    String county = request.queryParams("county");
+    String queryState = request.queryParams("state");
+    String queryCounty = request.queryParams("county");
 
     Map<String, Object> responseMap = new HashMap<>();
 
     try {
-      List<String> data = serverState.fetch(state, county);
+      List<String> data = state.fetch(queryState, queryCounty);
 
-      responseMap.put("state", state);
-      responseMap.put("county", county);
+      responseMap.put("state", queryState);
+      responseMap.put("county", queryCounty);
       responseMap.put("percentage", data.get(0));
       responseMap.put("local date", data.get(1));
       responseMap.put("local time", data.get(2));

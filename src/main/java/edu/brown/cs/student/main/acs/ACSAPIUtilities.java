@@ -15,89 +15,99 @@ public class ACSAPIUtilities {
 
   private ACSAPIUtilities() {}
 
-  public static List<State> deserializeStates(String jsonList) throws IOException {
-    List<State> states = new ArrayList<State>();
+  public static List<State> deserializeStates(String jsonList)
+      throws IOException, JsonDataException {
+
+    System.out.println("in deserializeStates");
+
+    List<State> deserializedStates = new ArrayList<>();
     try {
       Moshi moshi = new Moshi.Builder().build();
-      // notice the type and JSONAdapter parameterized type match the return type of the method
-      // Since List is generic, we shouldn't just pass List.class to the adapter factory.
-      // Instead, let's be more precise. Java has built-in classes for talking about generic types
-      // programmatically.
-      // Building libraries that use them is outside the scope of this class, but we'll follow the
-      // Moshi docs'
-      // template by creating a Type object corresponding to List<Ingredient>:
-      Type listType =
-          Types.newParameterizedType(
-              List.class, State.class); // Takes in class of the object for JSON to be made from
-      JsonAdapter<List<State>> adapter =
-          moshi.adapter(listType); // Make adapter based on those classes
 
-      List<State> deserializedStates =
-          adapter.fromJson(jsonList); // Does the deserializing w/ adapter into List of JSON Class
+      Type listType = Types.newParameterizedType(List.class, List.class, String.class);
+      JsonAdapter<List<List<String>>> adapter = moshi.adapter(listType);
+
+      List<List<String>> data = adapter.fromJson(jsonList);
+
+      for (int i = 1; i < data.size(); i++) {
+        List<String> stateData = data.get(i);
+        if (stateData.size() >= 2) { // Assuming at least two elements: name and code
+          String name = stateData.get(0);
+          String code = stateData.get(1);
+          deserializedStates.add(new State(name, code));
+        }
+      }
+
+      System.out.println("returning from deserialize states");
 
       return deserializedStates;
-    }
-    // From the Moshi Docs (https://github.com/square/moshi):
-    //   "Moshi always throws a standard java.io.IOException if there is an error reading the JSON
-    // document, or if it is malformed. It throws a JsonDataException if the JSON document is
-    // well-formed, but doesn't match the expected format."
-    catch (IOException e) {
+    } catch (IOException e) {
       // In a real system, we wouldn't println like this, but it's useful for demonstration:
-      System.err.println("OrderHandler: string wasn't valid JSON.");
+      System.err.println("string wasn't valid JSON.");
       throw e;
     } catch (JsonDataException e) {
       // In a real system, we wouldn't println like this, but it's useful for demonstration:
-      System.err.println("OrderHandler: JSON wasn't in the right format.");
+      System.err.println("JSON wasn't in the right format.");
       throw e;
     }
   }
 
-  public static List<County> deserializeCounties(String jsonList) throws IOException {
-    List<State> states = new ArrayList<State>();
+  public static List<County> deserializeCounties(String jsonList)
+      throws IOException, JsonDataException {
+    List<County> deserializedCounties = new ArrayList<>();
     try {
       Moshi moshi = new Moshi.Builder().build();
-      // notice the type and JSONAdapter parameterized type match the return type of the method
-      // Since List is generic, we shouldn't just pass List.class to the adapter factory.
-      // Instead, let's be more precise. Java has built-in classes for talking about generic types
-      // programmatically.
-      // Building libraries that use them is outside the scope of this class, but we'll follow the
-      // Moshi docs'
-      // template by creating a Type object corresponding to List<Ingredient>:
-      Type listType =
-          Types.newParameterizedType(
-              List.class, County.class); // Takes in class of the object for JSON to be made from
-      JsonAdapter<List<County>> adapter =
-          moshi.adapter(listType); // Make adapter based on those classes
 
-      List<County> deserializedCounties =
-          adapter.fromJson(jsonList); // Does the deserializing w/ adapter into List of JSON Class
+      Type listType = Types.newParameterizedType(List.class, List.class, String.class);
+      JsonAdapter<List<List<String>>> adapter = moshi.adapter(listType);
+
+      List<List<String>> data = adapter.fromJson(jsonList);
+
+      for (int i = 1; i < data.size(); i++) {
+        List<String> countyData = data.get(i);
+        if (countyData.size() >= 2) { // Assuming at least two elements: name and code
+          String name = countyData.get(0);
+          String countyName = name.split(",")[0];
+
+          String stateCode = countyData.get(1);
+          String code = countyData.get(2);
+          deserializedCounties.add(new County(countyName, stateCode, code));
+        }
+      }
 
       return deserializedCounties;
-    }
-    // From the Moshi Docs (https://github.com/square/moshi):
-    //   "Moshi always throws a standard java.io.IOException if there is an error reading the JSON
-    // document, or if it is malformed. It throws a JsonDataException if the JSON document is
-    // well-formed, but doesn't match the expected format."
-    catch (IOException e) {
+    } catch (IOException e) {
       // In a real system, we wouldn't println like this, but it's useful for demonstration:
-      System.err.println("OrderHandler: string wasn't valid JSON.");
+      System.err.println("string wasn't valid JSON.");
       throw e;
     } catch (JsonDataException e) {
       // In a real system, we wouldn't println like this, but it's useful for demonstration:
-      System.err.println("OrderHandler: JSON wasn't in the right format.");
+      System.err.println("JSON wasn't in the right format.");
       throw e;
     }
   }
 
   public static List<List<String>> deserializeBroadbandData(String jsonList)
       throws IOException, JsonDataException {
-    Moshi moshi = new Moshi.Builder().build();
-    Type listType = Types.newParameterizedType(List.class, String.class);
-    JsonAdapter<List<List<String>>> adapter = moshi.adapter(listType);
+    List<List<String>> deserializedData = new ArrayList<>();
+    try {
+      Moshi moshi = new Moshi.Builder().build();
 
-    List<List<String>> deserializedData = adapter.fromJson(jsonList);
+      Type listType = Types.newParameterizedType(List.class, List.class, String.class);
+      JsonAdapter<List<List<String>>> adapter = moshi.adapter(listType);
 
-    return deserializedData;
+      List<List<String>> data = adapter.fromJson(jsonList);
+
+      return data;
+    } catch (IOException e) {
+      // In a real system, we wouldn't println like this, but it's useful for demonstration:
+      System.err.println("string wasn't valid JSON.");
+      throw e;
+    } catch (JsonDataException e) {
+      // In a real system, we wouldn't println like this, but it's useful for demonstration:
+      System.err.println("JSON wasn't in the right format.");
+      throw e;
+    }
   }
 
   public static String readInJson(String filepath) {

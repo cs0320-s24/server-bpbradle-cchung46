@@ -42,6 +42,8 @@ public class ServerState {
 
   public List<String> fetch(String state, String county)
       throws URISyntaxException, IOException, InterruptedException {
+    System.out.println("in fetch in server state");
+
     return acsrepo.fetch(state, county);
   }
 

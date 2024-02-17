@@ -2,11 +2,7 @@ package edu.brown.cs.student.main.server;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import edu.brown.cs.student.main.exceptions.BadJSONException;
-import edu.brown.cs.student.main.exceptions.BadRequestException;
-import edu.brown.cs.student.main.exceptions.DataSourceException;
 import edu.brown.cs.student.main.server.state.ServerState;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -35,7 +31,7 @@ public class FetchACSHandler implements Route {
     try {
       matches = serverState.fetch(state, county);
       responseMap.put("data", matches);
-    } catch (BadJSONException | BadRequestException | DataSourceException | URISyntaxException | IOException | InterruptedException e) {
+    } catch (URISyntaxException | IOException | InterruptedException e) {
       return new FetchFailureResponse(e.getMessage()).serialize();
     }
 

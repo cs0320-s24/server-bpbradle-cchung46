@@ -1,9 +1,6 @@
 package edu.brown.cs.student.main.server.state;
 
 import edu.brown.cs.student.main.exceptions.BadCSVException;
-import edu.brown.cs.student.main.exceptions.BadJSONException;
-import edu.brown.cs.student.main.exceptions.BadRequestException;
-import edu.brown.cs.student.main.exceptions.DataSourceException;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,7 +40,7 @@ public class ServerState {
     return csvrepo.viewCSV();
   }
 
-  public List<String> fetch(String state, String county) throws BadJSONException, BadRequestException, DataSourceException, URISyntaxException, IOException, InterruptedException {
+  public List<String> fetch(String state, String county) throws URISyntaxException, IOException, InterruptedException {
     return acsrepo.fetch(state, county);
   }
 

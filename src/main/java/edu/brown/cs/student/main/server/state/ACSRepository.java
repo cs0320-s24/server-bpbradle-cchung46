@@ -63,6 +63,10 @@ public class ACSRepository implements ACSRepositoryInterface {
 
   public List<String> fetch(String state, String county) throws URISyntaxException, IOException, InterruptedException {
 
+    if (!statesPopulated) {
+      populateStateCodes();
+    }
+
     String stateCode = stateCodes.get(state.toLowerCase());
     String countyCode = countyCodes.get(county.toLowerCase());
 
@@ -77,14 +81,14 @@ public class ACSRepository implements ACSRepositoryInterface {
             .build()
             .send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
 
-    LocalDate currentDate = LocalDate.now();
-    LocalTime currentTime = LocalTime.now();
+    String date = LocalDate.now().toString();
+    String time = LocalTime.now().toString();
 
-    String responseText = sentACSApiResponse.body();
-    System.out.println(responseText);
+    List<List<String>> data = ACSAPIUtilities.deserializeBroadbandData(sentACSApiResponse.body());
+    String percentage = data.get(1).get(2);
 
-    // TODO: Figure out form of this response and parse it to return percent, date/time, state, county
+    List<String> retval = List.of(percentage, date, time);
 
+    return retval;
   }
-
 }

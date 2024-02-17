@@ -21,16 +21,23 @@ public class LoadCSVHandler implements Route {
   @Override
   public Object handle(Request request, Response response) {
     String filepath = request.queryParams("filepath");
+
+    if (filepath.matches(".*\\.\\./.*")) {
+      return new LoadFailureResponse("error_datasource").serialize();
+    }
+    
+    String path = "./data/" + filepath;
+
     Map<String, Object> responseMap = new HashMap<>();
 
     try {
-      state.load(filepath);
+      state.load(path);
     } catch (BadCSVException | FileNotFoundException e) {
       state.logError(e);
       return new LoadFailureResponse("error_datasource").serialize();
     }
 
-    responseMap.put("filepath", filepath);
+    responseMap.put("filepath", path);
     return new LoadSuccessResponse(responseMap).serialize();
   }
 

@@ -1,7 +1,10 @@
 package edu.brown.cs.student.main.server.state;
 
+import edu.brown.cs.student.main.activity.State;
+import edu.brown.cs.student.main.activity.ACSAPIUtilities;
 import java.net.URI;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
@@ -20,39 +23,54 @@ public class ACSRepository implements ACSRepositoryInterface {
   private HashMap<String, String> stateCodes;
   private HashMap<String, String> countyCodes;
 
-  public void populateCodeLists() throws URISyntaxException, IOException, InterruptedException {
+  public ACSRepository() {
+    try {
+      populateStateCodes();
+    } catch(Exception e) {
+      System.err.println("Failed to populate state codes list: " + e.getMessage());
+    }
+  }
+
+  public void populateStateCodes() throws URISyntaxException, IOException, InterruptedException {
+
+    // Get JSON from API
     HttpRequest buildACSRequest =
         HttpRequest.newBuilder()
             .uri(new URI("https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*"))
             .GET()
             .build();
 
-    HttpResponse<String> sentCountryResponse =
+    HttpResponse<String> sentStateResponse =
         HttpClient.newBuilder()
             .build()
             .send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
 
-    System.out.println(sentCountryResponse.body());
+    // Convert JSON to list of State Objects
+    String menuAsJson = ACSAPIUtilities.readInJson(sentStateResponse);
+    List<State> states = new ArrayList<>();
+    try {
+      states = ACSAPIUtilities.deserializeMenu(menuAsJson);
+    } catch (Exception e) {
+      // See note in ActivityHandler about this broad Exception catch... Unsatisfactory, but gets
+      // the job done in the gearup where it is not the focus.
+      e.printStackTrace();
+      System.err.println("Errored while deserializing the menu");
+    }
 
     // TODO: Populate stateCodes list then use that to populate all the countyCodes
 
   }
 
   public List<String> fetch(String state, String county) throws URISyntaxException, IOException, InterruptedException {
-    populateCodeLists();
 
-    String stateCode = state;
-    String countyCode = county;
-    if (!stateCode.equals("*")) stateCode = stateCodes.get(state.toLowerCase());
-    if (!countyCode.equals("*")) countyCode = countyCodes.get(county.toLowerCase());
+    String stateCode = stateCodes.get(state.toLowerCase());
+    String countyCode = countyCodes.get(county.toLowerCase());
 
     HttpRequest buildACSRequest =
     HttpRequest.newBuilder()
-        .uri(new URI("https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"+countyCode+"&in=state:" + stateCode))
+        .uri(new URI("https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"+ countyCode +"&in=state:" + stateCode))
         .GET()
         .build();
-
-    // Unsure why there's unhandled exceptions here which don't pop up in handout
 
     HttpResponse<String> sentACSApiResponse =
         HttpClient.newBuilder()
@@ -61,8 +79,6 @@ public class ACSRepository implements ACSRepositoryInterface {
 
     LocalDate currentDate = LocalDate.now();
     LocalTime currentTime = LocalTime.now();
-
-    // ^ Again, unsure why there's unhandled exceptions here which don't pop up in handout
 
     String responseText = sentACSApiResponse.body();
     System.out.println(responseText);

@@ -1,19 +1,19 @@
 package edu.brown.cs.student.main.server.state;
 
+import edu.brown.cs.student.main.acs.ACSAPIUtilities;
 import edu.brown.cs.student.main.acs.County;
 import edu.brown.cs.student.main.acs.State;
-import edu.brown.cs.student.main.acs.ACSAPIUtilities;
-import java.net.URI;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ACSRepository implements ACSRepositoryInterface {
   private HashMap<String, String> stateCodes;
@@ -35,9 +35,7 @@ public class ACSRepository implements ACSRepositoryInterface {
             .build();
 
     HttpResponse<String> sentStateResponse =
-        HttpClient.newBuilder()
-            .build()
-            .send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
+        HttpClient.newBuilder().build().send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
 
     // Convert JSON to list of State Objects
     String menuAsJson = ACSAPIUtilities.readInJson(sentStateResponse.body());
@@ -60,19 +58,21 @@ public class ACSRepository implements ACSRepositoryInterface {
     statesPopulated = true;
   }
 
-  public void populateCountyCodes(String stateCode) throws URISyntaxException, IOException, InterruptedException {
+  public void populateCountyCodes(String stateCode)
+      throws URISyntaxException, IOException, InterruptedException {
 
     // Get JSON from API
     HttpRequest buildACSRequest =
         HttpRequest.newBuilder()
-            .uri(new URI("https://api.census.gov/data/2010/dec/sf1?get=NAME&for=county:*&in=state:" + stateCode))
+            .uri(
+                new URI(
+                    "https://api.census.gov/data/2010/dec/sf1?get=NAME&for=county:*&in=state:"
+                        + stateCode))
             .GET()
             .build();
 
     HttpResponse<String> sentCountyResponse =
-        HttpClient.newBuilder()
-            .build()
-            .send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
+        HttpClient.newBuilder().build().send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
 
     // Convert JSON to list of State Objects
     String menuAsJson = ACSAPIUtilities.readInJson(sentCountyResponse.body());
@@ -93,7 +93,8 @@ public class ACSRepository implements ACSRepositoryInterface {
     }
   }
 
-  public List<String> fetch(String state, String county) throws URISyntaxException, IOException, InterruptedException {
+  public List<String> fetch(String state, String county)
+      throws URISyntaxException, IOException, InterruptedException {
 
     if (!statesPopulated) {
       populateStateCodes();
@@ -103,15 +104,18 @@ public class ACSRepository implements ACSRepositoryInterface {
     String countyCode = countyCodes.get(county.toLowerCase());
 
     HttpRequest buildACSRequest =
-    HttpRequest.newBuilder()
-        .uri(new URI("https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"+ countyCode +"&in=state:" + stateCode))
-        .GET()
-        .build();
+        HttpRequest.newBuilder()
+            .uri(
+                new URI(
+                    "https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"
+                        + countyCode
+                        + "&in=state:"
+                        + stateCode))
+            .GET()
+            .build();
 
     HttpResponse<String> sentACSApiResponse =
-        HttpClient.newBuilder()
-            .build()
-            .send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
+        HttpClient.newBuilder().build().send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
 
     String date = LocalDate.now().toString();
     String time = LocalTime.now().toString();

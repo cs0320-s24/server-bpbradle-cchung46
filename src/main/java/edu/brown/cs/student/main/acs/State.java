@@ -16,5 +16,4 @@ public class State {
   public String getStateCode() {
     return this.code;
   }
-
 }

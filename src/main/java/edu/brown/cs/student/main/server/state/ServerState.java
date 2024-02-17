@@ -40,7 +40,8 @@ public class ServerState {
     return csvrepo.viewCSV();
   }
 
-  public List<String> fetch(String state, String county) throws URISyntaxException, IOException, InterruptedException {
+  public List<String> fetch(String state, String county)
+      throws URISyntaxException, IOException, InterruptedException {
     return acsrepo.fetch(state, county);
   }
 

@@ -35,7 +35,9 @@ public class ServerState {
     return csvrepo.searchCSV(val);
   }
 
-  public void view() {}
+  public List<List<String>> view() {
+    return csvrepo.viewCSV();
+  }
 
   public void logError(Exception e) {
     PrintWriter pw = null;

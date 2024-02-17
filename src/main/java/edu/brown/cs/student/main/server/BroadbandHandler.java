@@ -22,13 +22,20 @@ public class BroadbandHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) {
+
+    System.out.println("entered broadband endpt");
+
     String queryState = request.queryParams("state");
     String queryCounty = request.queryParams("county");
 
     Map<String, Object> responseMap = new HashMap<>();
 
     try {
+      System.out.println("calling fetch");
+
       List<String> data = state.fetch(queryState, queryCounty);
+
+      System.out.println("% is: " + data.get(0));
 
       responseMap.put("state", queryState);
       responseMap.put("county", queryCounty);

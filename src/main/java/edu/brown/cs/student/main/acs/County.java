@@ -1,12 +1,10 @@
-package edu.brown.cs.student.main.activity;
-
-import java.util.List;
+package edu.brown.cs.student.main.acs;
 
 public class County {
   private String name;
-  private int code;
+  private String code;
 
-  public County(String name, int code) {
+  public County(String name, String code) {
     this.name = name;
     this.code = code;
   }
@@ -15,7 +13,7 @@ public class County {
     return this.name;
   }
 
-  public int getCountyCode() {
+  public String getCountyCode() {
     return this.code;
   }
 

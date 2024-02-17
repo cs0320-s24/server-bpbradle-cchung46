@@ -20,29 +20,27 @@ public class ViewCSVHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) {
-        String filepath = request.queryParams("filepath");
-        Map<String, Object> responseMap = new HashMap<>();
 
-        try {
-            state.load(filepath);
-        } catch (BadCSVException | FileNotFoundException e) {
-            state.logError(e);
-            return new LoadFailureResponse("error_datasource").serialize();
+        if (!state.csvloaded) {
+            state.logError(new FileNotFoundException("No CSV loaded."));
+            return new ViewFailureResponse("error_datasource").serialize();
         }
 
-        responseMap.put("filepath", filepath);
-        return new LoadSuccessResponse(responseMap).serialize();
+        Map<String, Object> responseMap = new HashMap<>();
+
+        responseMap.put("data", state.view());
+        return new ViewSuccessResponse(responseMap).serialize();
     }
 
-    public record LoadSuccessResponse(String response_type, Map<String, Object> responseMap) {
-        public LoadSuccessResponse(Map<String, Object> responseMap) {
+    public record ViewSuccessResponse(String response_type, Map<String, Object> responseMap) {
+        public ViewSuccessResponse(Map<String, Object> responseMap) {
             this("success", responseMap);
         }
 
         String serialize() {
             try {
                 Moshi moshi = new Moshi.Builder().build();
-                JsonAdapter<LoadSuccessResponse> adapter = moshi.adapter(LoadSuccessResponse.class);
+                JsonAdapter<ViewSuccessResponse> adapter = moshi.adapter(ViewSuccessResponse.class);
                 return adapter.toJson(this);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -51,14 +49,14 @@ public class ViewCSVHandler implements Route {
         }
     }
 
-    public record LoadFailureResponse(String response_type) {
-        public LoadFailureResponse() {
+    public record ViewFailureResponse(String response_type) {
+        public ViewFailureResponse() {
             this("error");
         }
 
         String serialize() {
             Moshi moshi = new Moshi.Builder().build();
-            return moshi.adapter(LoadFailureResponse.class).toJson(this);
+            return moshi.adapter(ViewFailureResponse.class).toJson(this);
         }
     }
 }

@@ -6,16 +6,14 @@ import edu.brown.cs.student.main.csv.Searcher;
 import edu.brown.cs.student.main.exceptions.BadCSVException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CSVRepository {
   private Parser<List<String>> parser;
   private Searcher searcher;
-  private boolean csvloaded;
 
-  public CSVRepository() {
-    this.csvloaded = false;
-  }
+  public CSVRepository() {}
 
   public void loadCSV(String filepath) throws BadCSVException, FileNotFoundException {
     FileReader reader = new FileReader(filepath);
@@ -23,24 +21,29 @@ public class CSVRepository {
 
     this.parser = new Parser<>(reader, creator, true);
     this.searcher = new Searcher(parser);
-    this.csvloaded = true;
   }
 
   public List<List<String>> searchCSV(String val, String col) throws BadCSVException {
     return this.searcher.search(val, col);
   }
 
-  public List<List<String>> searchCSV(String val, int col) throws BadCSVException {
+  public List<List<String>> searchCSV(String val, int col) {
     return this.searcher.search(val, col);
   }
 
-  public List<List<String>> searchCSV(String val) throws BadCSVException {
+  public List<List<String>> searchCSV(String val) {
     return this.searcher.search(val);
   }
 
-  public void viewCSV() {}
+  public List<List<String>> viewCSV() {
+    List<List<String>> retval = new ArrayList<>();
 
-  public boolean loaded() {
-    return this.csvloaded;
+    retval.add(this.parser.getHeaders());
+
+    for (List<String> obj : this.parser.getObjs()) {
+      retval.add(obj);
+    }
+
+    return retval;
   }
 }

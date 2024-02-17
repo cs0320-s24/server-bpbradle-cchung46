@@ -39,7 +39,9 @@ public class ServerState {
     return csvrepo.searchCSV(val);
   }
 
-  public void view() {}
+  public List<List<String>> view() {
+    return csvrepo.viewCSV();
+  }
 
   public List<String> fetch(String state, String county) throws BadJSONException, BadRequestException, DataSourceException, URISyntaxException, IOException, InterruptedException {
     return acsrepo.fetch(state, county);

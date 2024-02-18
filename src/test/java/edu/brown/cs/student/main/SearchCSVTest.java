@@ -1,4 +1,3 @@
 package edu.brown.cs.student.main;
 
-public class SearchCSVTest {
-}
+public class SearchCSVTest {}

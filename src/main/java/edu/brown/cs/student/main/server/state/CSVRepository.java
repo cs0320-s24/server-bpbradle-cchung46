@@ -27,7 +27,7 @@ public class CSVRepository {
     return this.searcher.search(val, col);
   }
 
-  public List<List<String>> searchCSV(String val, int col) {
+  public List<List<String>> searchCSV(String val, int col) throws BadCSVException {
     return this.searcher.search(val, col);
   }
 

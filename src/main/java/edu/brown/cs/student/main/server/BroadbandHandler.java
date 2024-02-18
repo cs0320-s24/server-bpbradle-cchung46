@@ -50,6 +50,10 @@ public class BroadbandHandler implements Route {
       state.logError(e);
       return new FetchFailureResponse("error_bad_json").serialize();
     }
+    catch (IllegalArgumentException e) {
+      state.logError(e);
+      return new FetchFailureResponse("error_bad_request").serialize();
+    }
 
     return new FetchSuccessResponse(responseMap).serialize();
   }

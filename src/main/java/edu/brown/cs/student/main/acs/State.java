@@ -4,6 +4,8 @@ package edu.brown.cs.student.main.acs;
  * An object encapsulating the information received from the ACS API for a state and a few accessor
  * methods
  */
+import java.util.Objects;
+
 public class State {
   private String name;
   private String code;
@@ -37,5 +39,16 @@ public class State {
    */
   public String getStateCode() {
     return this.code;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    State rhs = (State) o;
+    return (Objects.equals(this.name, rhs.name) && Objects.equals(this.code, rhs.code));
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, code);
   }
 }

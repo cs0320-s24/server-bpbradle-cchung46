@@ -32,7 +32,7 @@ public class ServerState {
     return csvrepo.searchCSV(val, col);
   }
 
-  public List<List<String>> search(String val) throws BadCSVException {
+  public List<List<String>> search(String val) {
     return csvrepo.searchCSV(val);
   }
 

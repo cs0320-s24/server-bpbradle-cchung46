@@ -125,7 +125,7 @@ public class ACSRepository implements ACSRepositoryInterface {
    * @throws JsonDataException         If parsing the JSON response from the ACS API fails.
    */
   public List<String> fetch(String state, String county)
-      throws URISyntaxException, IOException, InterruptedException, JsonDataException {
+      throws URISyntaxException, IOException, InterruptedException, JsonDataException, IllegalArgumentException {
 
     if (!statesPopulated) {
       populateStateCodes();
@@ -134,6 +134,10 @@ public class ACSRepository implements ACSRepositoryInterface {
 
     populateCountyCodes(stateCode);
     String countyCode = countyCodes.get(county.toLowerCase());
+
+    if (stateCode == null || countyCode == null) {
+      throw new IllegalArgumentException("Invalid state or county name.");
+    }
 
     HttpRequest buildACSRequest =
         HttpRequest.newBuilder()

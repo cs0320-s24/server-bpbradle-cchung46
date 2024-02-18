@@ -47,8 +47,12 @@ public class Searcher {
    * @param value what the user is searching for
    * @param idx the index of the column the user wants to search within
    */
-  public List<List<String>> search(String value, int idx) {
+  public List<List<String>> search(String value, int idx) throws BadCSVException {
     List<List<String>> retval = new ArrayList<>();
+
+    if (idx >= this.parser.getObjs().size()) {
+      throw new BadCSVException("Invalid column.");
+    }
 
     // iterates through the parsed data, converts both strings to compare to lowercase,
     // and checks if value is a substr of the data value.

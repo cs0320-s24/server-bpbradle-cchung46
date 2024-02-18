@@ -22,6 +22,10 @@ public class LoadCSVHandler implements Route {
   public Object handle(Request request, Response response) {
     String filepath = request.queryParams("filepath");
 
+    if (filepath == null) {
+      return new LoadFailureResponse("error_bad_request").serialize();
+    }
+
     if (filepath.matches(".*\\.\\./.*")) {
       return new LoadFailureResponse("error_datasource").serialize();
     }

@@ -1,5 +1,6 @@
 package edu.brown.cs.student.main.server.state;
 
+import com.squareup.moshi.JsonDataException;
 import edu.brown.cs.student.main.acs.ACSAPIUtilities;
 import edu.brown.cs.student.main.acs.County;
 import edu.brown.cs.student.main.acs.State;
@@ -28,9 +29,7 @@ public class ACSRepository implements ACSRepositoryInterface {
     this.countyCodes = new HashMap<>();
   }
 
-  public void populateStateCodes() throws URISyntaxException, IOException, InterruptedException {
-
-    System.out.println("in populateStateCodes()");
+  public void populateStateCodes() throws URISyntaxException, IOException, InterruptedException, JsonDataException {
 
     // Get JSON from API
     HttpRequest buildACSRequest =
@@ -42,29 +41,8 @@ public class ACSRepository implements ACSRepositoryInterface {
     HttpResponse<String> sentStateResponse =
         HttpClient.newBuilder().build().send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
 
-    System.out.println("successfully built + sent response");
-
     // Convert JSON to list of State Objects
-    // String statesAsJson = ACSAPIUtilities.readInJson(sentStateResponse.body());
-    List<State> states = new ArrayList<>();
-    try {
-
-      System.out.println("calling deserializeStates");
-
-      states = ACSAPIUtilities.deserializeStates(sentStateResponse.body());
-
-      System.out.println("successfully deserialized states");
-
-    } catch (Exception e) {
-      // See note in ActivityHandler about this broad Exception catch... Unsatisfactory, but gets
-      // the job done in the gearup where it is not the focus.
-      e.printStackTrace();
-      System.err.println("Errored while deserializing states.");
-    }
-
-    System.out.println("turning states into map");
-
-    System.out.println("states size is: " + states.size());
+    List<State> states = ACSAPIUtilities.deserializeStates(sentStateResponse.body());
 
     // Add Codes of all the states to the statesCode list to be stored
     for (int i = 1; i < states.size(); i++) {
@@ -76,12 +54,10 @@ public class ACSRepository implements ACSRepositoryInterface {
     }
 
     statesPopulated = true;
-
-    System.out.println("returning from populateStates");
   }
 
   public void populateCountyCodes(String stateCode)
-      throws URISyntaxException, IOException, InterruptedException {
+      throws URISyntaxException, IOException, InterruptedException, JsonDataException {
 
     // Get JSON from API
     HttpRequest buildACSRequest =
@@ -98,15 +74,7 @@ public class ACSRepository implements ACSRepositoryInterface {
 
     // Convert JSON to list of State Objects
     // String countiesAsJson = ACSAPIUtilities.readInJson(sentCountyResponse.body());
-    List<County> counties = new ArrayList<>();
-    try {
-      counties = ACSAPIUtilities.deserializeCounties(sentCountyResponse.body());
-    } catch (Exception e) {
-      // See note in ActivityHandler about this broad Exception catch... Unsatisfactory, but gets
-      // the job done in the gearup where it is not the focus.
-      e.printStackTrace();
-      System.err.println("Errored while deserializing counties.");
-    }
+    List<County> counties = ACSAPIUtilities.deserializeCounties(sentCountyResponse.body());
 
     // Add Codes of all the states to the countyCodes list to be stored
     for (int i = 1; i < counties.size(); i++) {
@@ -116,27 +84,15 @@ public class ACSRepository implements ACSRepositoryInterface {
   }
 
   public List<String> fetch(String state, String county)
-      throws URISyntaxException, IOException, InterruptedException {
-
-    System.out.println("in fetchi in ACSrepo");
+      throws URISyntaxException, IOException, InterruptedException, JsonDataException {
 
     if (!statesPopulated) {
       populateStateCodes();
     }
-
     String stateCode = stateCodes.get(state.toLowerCase());
 
     populateCountyCodes(stateCode);
-
-    System.out.println("populated states successfully");
-
-    System.out.println("state is: " + state);
-    System.out.println("county is: " + county);
-
     String countyCode = countyCodes.get(county.toLowerCase());
-
-    System.out.println("stateCode: " + stateCode);
-    System.out.println("countyCode: " + countyCode);
 
     HttpRequest buildACSRequest =
         HttpRequest.newBuilder()
@@ -152,27 +108,13 @@ public class ACSRepository implements ACSRepositoryInterface {
     HttpResponse<String> sentACSApiResponse =
         HttpClient.newBuilder().build().send(buildACSRequest, HttpResponse.BodyHandlers.ofString());
 
-    System.out.println("built + received ACI responses");
-
-    System.out.println("response is: " + sentACSApiResponse.body());
-
     String date = LocalDate.now().toString();
     String time = LocalTime.now().toString();
 
-    System.out.println("date: " + date);
-    System.out.println("time: " + time);
-
     List<List<String>> data = ACSAPIUtilities.deserializeBroadbandData(sentACSApiResponse.body());
-
-    System.out.println("deserialized data successfully");
-
     String percentage = data.get(1).get(1);
 
-    System.out.println("% is: " + percentage);
-
     List<String> retval = List.of(percentage, date, time);
-
-    System.out.println("returning from ACSrepo");
 
     return retval;
   }

@@ -23,8 +23,6 @@ public class SearchCSVHandler implements Route {
   @Override
   public Object handle(Request request, Response response) {
 
-    System.out.println("new req being handled");
-
     if (!state.csvloaded) {
       state.logError(new FileNotFoundException("No CSV loaded."));
       return new SearchFailureResponse("error_datasource").serialize();
@@ -32,6 +30,10 @@ public class SearchCSVHandler implements Route {
 
     String val = request.queryParams("value");
     String colStr = request.queryParams("column");
+
+    if (val == null || colStr == null) {
+      return new SearchFailureResponse("error_bad_request").serialize();
+    }
 
     Integer colInt = null;
     if (colStr != null) {

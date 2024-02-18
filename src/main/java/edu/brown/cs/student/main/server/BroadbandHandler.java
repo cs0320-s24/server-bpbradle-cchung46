@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.server;
 
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.main.server.state.ServerState;
 import java.io.IOException;
@@ -23,19 +24,17 @@ public class BroadbandHandler implements Route {
   @Override
   public Object handle(Request request, Response response) {
 
-    System.out.println("entered broadband endpt");
-
     String queryState = request.queryParams("state");
     String queryCounty = request.queryParams("county");
+
+    if (queryState == null || queryCounty == null) {
+      return new FetchFailureResponse("error_bad_request").serialize();
+    }
 
     Map<String, Object> responseMap = new HashMap<>();
 
     try {
-      System.out.println("calling fetch");
-
       List<String> data = state.fetch(queryState, queryCounty);
-
-      System.out.println("% is: " + data.get(0));
 
       responseMap.put("state", queryState);
       responseMap.put("county", queryCounty);
@@ -45,7 +44,11 @@ public class BroadbandHandler implements Route {
 
     } catch (URISyntaxException | IOException | InterruptedException e) {
       state.logError(e);
-      return new FetchFailureResponse().serialize();
+      return new FetchFailureResponse("error_datasource").serialize();
+    }
+    catch (JsonDataException e) {
+      state.logError(e);
+      return new FetchFailureResponse("error_bad_json").serialize();
     }
 
     return new FetchSuccessResponse(responseMap).serialize();

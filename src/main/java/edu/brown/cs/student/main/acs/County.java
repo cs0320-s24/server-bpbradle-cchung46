@@ -1,5 +1,7 @@
 package edu.brown.cs.student.main.acs;
 
+import java.util.Objects;
+
 /**
  * An object encapsulating the information received from the ACS API for a county and a few accessor
  * methods
@@ -38,5 +40,18 @@ public class County {
    */
   public String getCountyCode() {
     return this.code;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    County rhs = (County) o;
+    return (Objects.equals(this.name, rhs.name)
+        && Objects.equals(this.code, rhs.code)
+        && Objects.equals(this.stateCode, rhs.stateCode));
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, stateCode, code);
   }
 }

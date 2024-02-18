@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server.state;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -65,5 +66,9 @@ public class ACSCachingRepository implements ACSRepositoryInterface {
   public List<String> fetch(String state, String county) {
     List<String> result = cache.getUnchecked(new Pair<>(state, county));
     return result;
+  }
+
+  public CacheStats getStats() {
+    return cache.stats();
   }
 }

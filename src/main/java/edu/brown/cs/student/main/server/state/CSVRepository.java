@@ -15,11 +15,17 @@ public class CSVRepository {
 
   public CSVRepository() {}
 
-  public void loadCSV(String filepath) throws BadCSVException, FileNotFoundException {
+  public void loadCSV(String filepath, String header) throws BadCSVException, FileNotFoundException {
     FileReader reader = new FileReader(filepath);
     RowCreator creator = new RowCreator();
 
-    this.parser = new Parser<>(reader, creator, true);
+    boolean hasHeader = false;
+
+    if (header.equals("y")) {
+      hasHeader = true;
+    }
+
+    this.parser = new Parser<>(reader, creator, hasHeader);
     this.searcher = new Searcher(parser);
   }
 

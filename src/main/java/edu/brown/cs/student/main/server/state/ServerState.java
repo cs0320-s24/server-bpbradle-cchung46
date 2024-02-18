@@ -19,8 +19,8 @@ public class ServerState {
     csvloaded = false;
   }
 
-  public void load(String filepath) throws BadCSVException, FileNotFoundException {
-    csvrepo.loadCSV(filepath);
+  public void load(String filepath, String header) throws BadCSVException, FileNotFoundException {
+    csvrepo.loadCSV(filepath, header);
     csvloaded = true;
   }
 

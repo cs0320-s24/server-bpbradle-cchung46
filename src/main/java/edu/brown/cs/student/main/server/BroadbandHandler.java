@@ -114,7 +114,6 @@ public class BroadbandHandler implements Route {
    * the nature of the failure and the default response type of "error".
    * @param response_type The type of response, indicating the nature of the error.
    */
-
   public record FetchFailureResponse(String response_type) {
 
     /**
@@ -128,7 +127,6 @@ public class BroadbandHandler implements Route {
      * Converts the response into a JSON string indicating an error response using the Moshi library.
      * @return A JSON string representing the serialized form of the FetchFailureResponse instance.
      */
-
     String serialize() {
       Moshi moshi = new Moshi.Builder().build();
       return moshi.adapter(FetchFailureResponse.class).toJson(this);

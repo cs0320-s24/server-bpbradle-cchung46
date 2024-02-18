@@ -14,7 +14,6 @@ import kotlin.Pair;
  * responses to avoid re-requesting for recently requested data. The cache automatically handles
  * loading of new data as required and can be configured with custom expiration policies.
  */
-
 public class ACSCachingRepository implements ACSRepositoryInterface {
 
   ACSRepositoryInterface wrappedRepo;
@@ -31,7 +30,6 @@ public class ACSCachingRepository implements ACSRepositoryInterface {
    * @param numUnits The number of units after which a cache entry will expire.
    * @param unitType The TimeUnit that specifies the unit for numUnits.
    */
-
   public ACSCachingRepository(
       ACSRepositoryInterface toWrap, int size, int numUnits, TimeUnit unitType) {
     this.wrappedRepo = toWrap;
@@ -60,7 +58,6 @@ public class ACSCachingRepository implements ACSRepositoryInterface {
    * @return A list containing the fetched data. The contents of the list depend on the underlying
    *         repository implementation but typically include data like percentages, dates, and times.
    */
-
   @Override
   public List<String> fetch(String state, String county) {
     List<String> result = cache.getUnchecked(new Pair<>(state, county));

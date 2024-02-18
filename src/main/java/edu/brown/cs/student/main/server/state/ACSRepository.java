@@ -85,7 +85,6 @@ public class ACSRepository implements ACSRepositoryInterface {
    * @throws InterruptedException      If the operation is interrupted during the HTTP request.
    * @throws JsonDataException         If parsing the JSON response from the ACS API fails.
    */
-
   public void populateCountyCodes(String stateCode)
       throws URISyntaxException, IOException, InterruptedException, JsonDataException {
 
@@ -125,7 +124,6 @@ public class ACSRepository implements ACSRepositoryInterface {
    * @throws InterruptedException      If the operation is interrupted during the HTTP request.
    * @throws JsonDataException         If parsing the JSON response from the ACS API fails.
    */
-
   public List<String> fetch(String state, String county)
       throws URISyntaxException, IOException, InterruptedException, JsonDataException {
 

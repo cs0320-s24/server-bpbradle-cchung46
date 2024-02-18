@@ -23,7 +23,6 @@ public class State {
    * Returns the name of the state.
    * @return A string representing the name of the state.
    */
-
   public String getStateName() {
     return this.name;
   }
@@ -33,7 +32,6 @@ public class State {
    * @return A string representing the code of the state. This is typically an abbreviation
    *         or a unique identifier used in databases and APIs.
    */
-
   public String getStateCode() {
     return this.code;
   }

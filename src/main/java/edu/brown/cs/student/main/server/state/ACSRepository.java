@@ -12,14 +12,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Constructs and handles HTTP request to ACS API based on ACS state and county codes.
- */
-
+/** Constructs and handles HTTP request to ACS API based on ACS state and county codes. */
 public class ACSRepository implements ACSRepositoryInterface {
   private HashMap<String, String> stateCodes;
   private HashMap<String, String> countyCodes;
@@ -42,12 +38,13 @@ public class ACSRepository implements ACSRepositoryInterface {
    * state, which is necessary to convert the user queried state into a proper request to the ACS
    * HTTP.
    *
-   * @throws URISyntaxException        If the URI for the ACS API is incorrectly formatted.
-   * @throws IOException               If an I/O error occurs when sending or receiving from the ACS API.
-   * @throws InterruptedException      If the operation is interrupted during the HTTP request.
-   * @throws JsonDataException         If parsing the JSON response from the ACS API fails.
+   * @throws URISyntaxException If the URI for the ACS API is incorrectly formatted.
+   * @throws IOException If an I/O error occurs when sending or receiving from the ACS API.
+   * @throws InterruptedException If the operation is interrupted during the HTTP request.
+   * @throws JsonDataException If parsing the JSON response from the ACS API fails.
    */
-  public void populateStateCodes() throws URISyntaxException, IOException, InterruptedException, JsonDataException {
+  public void populateStateCodes()
+      throws URISyntaxException, IOException, InterruptedException, JsonDataException {
 
     // Get JSON from API
     HttpRequest buildACSRequest =
@@ -80,10 +77,10 @@ public class ACSRepository implements ACSRepositoryInterface {
    * counties into a proper request to the ACS HTTP.
    *
    * @param stateCode The code of the state for which county codes are to be fetched.
-   * @throws URISyntaxException        If the URI for the ACS API is incorrectly formatted.
-   * @throws IOException               If an I/O error occurs when sending or receiving from the ACS API.
-   * @throws InterruptedException      If the operation is interrupted during the HTTP request.
-   * @throws JsonDataException         If parsing the JSON response from the ACS API fails.
+   * @throws URISyntaxException If the URI for the ACS API is incorrectly formatted.
+   * @throws IOException If an I/O error occurs when sending or receiving from the ACS API.
+   * @throws InterruptedException If the operation is interrupted during the HTTP request.
+   * @throws JsonDataException If parsing the JSON response from the ACS API fails.
    */
   public void populateCountyCodes(String stateCode)
       throws URISyntaxException, IOException, InterruptedException, JsonDataException {
@@ -116,16 +113,19 @@ public class ACSRepository implements ACSRepositoryInterface {
    * Fetches data from ACS API based on user query for state, county pair returning a list
    * containing the percentage, and the date and time of the request.
    *
-   * @param state   The name of the state for which data is to be fetched.
-   * @param county  The name of the county within the specified state for which data is to be fetched.
-   * @return A list containing the fetched percentage, the current local date, and the current local time.
-   * @throws URISyntaxException        If the URI for the ACS API is incorrectly formatted.
-   * @throws IOException               If an I/O error occurs when sending or receiving from the ACS API.
-   * @throws InterruptedException      If the operation is interrupted during the HTTP request.
-   * @throws JsonDataException         If parsing the JSON response from the ACS API fails.
+   * @param state The name of the state for which data is to be fetched.
+   * @param county The name of the county within the specified state for which data is to be
+   *     fetched.
+   * @return A list containing the fetched percentage, the current local date, and the current local
+   *     time.
+   * @throws URISyntaxException If the URI for the ACS API is incorrectly formatted.
+   * @throws IOException If an I/O error occurs when sending or receiving from the ACS API.
+   * @throws InterruptedException If the operation is interrupted during the HTTP request.
+   * @throws JsonDataException If parsing the JSON response from the ACS API fails.
    */
   public List<String> fetch(String state, String county)
-      throws URISyntaxException, IOException, InterruptedException, JsonDataException, IllegalArgumentException {
+      throws URISyntaxException, IOException, InterruptedException, JsonDataException,
+          IllegalArgumentException {
 
     if (!statesPopulated) {
       populateStateCodes();

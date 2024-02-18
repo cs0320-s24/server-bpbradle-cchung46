@@ -20,13 +20,14 @@ public class ACSCachingRepository implements ACSRepositoryInterface {
   private LoadingCache<Pair<String, String>, List<String>> cache;
 
   /**
-   * Constructs ACSCachingRepository with a specified underlying other ACSRepositoryInterface implementation,
-   * cache size, expiration time, and time unit for expiration to use in constructing the cache. The
-   * cache is set up to automatically fetch data using the provided repository if it does not exist
-   * in the cache or if the data has expired according to the specified policies.
+   * Constructs ACSCachingRepository with a specified underlying other ACSRepositoryInterface
+   * implementation, cache size, expiration time, and time unit for expiration to use in
+   * constructing the cache. The cache is set up to automatically fetch data using the provided
+   * repository if it does not exist in the cache or if the data has expired according to the
+   * specified policies.
    *
-   * @param toWrap   The ACSRepositoryInterface instance that this caching repository will wrap.
-   * @param size     The maximum number of entries the cache can hold.
+   * @param toWrap The ACSRepositoryInterface instance that this caching repository will wrap.
+   * @param size The maximum number of entries the cache can hold.
    * @param numUnits The number of units after which a cache entry will expire.
    * @param unitType The TimeUnit that specifies the unit for numUnits.
    */
@@ -53,10 +54,12 @@ public class ACSCachingRepository implements ACSRepositoryInterface {
   /**
    * Fetches data for the user queried state, county pair and uses the cache to avoid unnecessary
    * fetch operations to the underlying data source.
-   * @param state   The name of the state for which data is to be fetched.
-   * @param county  The name of the county within the specified state for which data is to be fetched.
+   *
+   * @param state The name of the state for which data is to be fetched.
+   * @param county The name of the county within the specified state for which data is to be
+   *     fetched.
    * @return A list containing the fetched data. The contents of the list depend on the underlying
-   *         repository implementation but typically include data like percentages, dates, and times.
+   *     repository implementation but typically include data like percentages, dates, and times.
    */
   @Override
   public List<String> fetch(String state, String county) {

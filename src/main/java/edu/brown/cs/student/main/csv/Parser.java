@@ -89,8 +89,7 @@ public class Parser<T> {
         List<String> currRow = parseLine(line);
         if (previousRowSize != -1 && currRow.size() != previousRowSize) {
           throw new BadCSVException("malformed csv.");
-        }
-        else {
+        } else {
           previousRowSize = currRow.size();
           T obj = creator.create(currRow);
           this.objs.add(obj);

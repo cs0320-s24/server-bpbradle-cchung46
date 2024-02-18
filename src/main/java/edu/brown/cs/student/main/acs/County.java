@@ -11,9 +11,10 @@ public class County {
 
   /**
    * Constructs a new County instance with the specified name, state code, and county code.
-   * @param name      The name of the county.
+   *
+   * @param name The name of the county.
    * @param stateCode The code of the state to which the county belongs.
-   * @param code      The code representing the county.
+   * @param code The code representing the county.
    */
   public County(String name, String stateCode, String code) {
     this.name = name;
@@ -23,6 +24,7 @@ public class County {
 
   /**
    * Retrieves the name of the county.
+   *
    * @return The name of the county.
    */
   public String getCountyName() {
@@ -31,6 +33,7 @@ public class County {
 
   /**
    * Retrieves the code of the county.
+   *
    * @return The code representing the county.
    */
   public String getCountyCode() {

@@ -31,7 +31,7 @@ public class SearchCSVHandler implements Route {
     String val = request.queryParams("value");
     String colStr = request.queryParams("column");
 
-    if (val == null || colStr == null) {
+    if (val == null) {
       return new SearchFailureResponse("error_bad_request").serialize();
     }
 

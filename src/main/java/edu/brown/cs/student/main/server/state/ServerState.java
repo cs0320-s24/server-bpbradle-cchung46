@@ -47,6 +47,10 @@ public class ServerState {
     return acsrepo.fetch(state, county);
   }
 
+  public ACSRepositoryInterface getACSrepo() {
+    return acsrepo;
+  }
+
   public void logError(Exception e) {
     PrintWriter pw = null;
     try {

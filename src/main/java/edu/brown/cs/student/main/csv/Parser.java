@@ -84,10 +84,16 @@ public class Parser<T> {
 
     // iterates through CSV and reads and processes each row using parseLine().
     try {
+      int previousRowSize = -1;
       while ((line = data.readLine()) != null) {
         List<String> currRow = parseLine(line);
-        T obj = creator.create(currRow);
-        this.objs.add(obj);
+        if (previousRowSize != -1 && currRow.size() != previousRowSize) {
+          throw new BadCSVException("malformed csv.");
+        } else {
+          previousRowSize = currRow.size();
+          T obj = creator.create(currRow);
+          this.objs.add(obj);
+        }
       }
     } catch (FactoryFailureException e) {
       throw new BadCSVException("Failed to create object.", e);

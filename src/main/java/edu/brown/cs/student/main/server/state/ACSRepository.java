@@ -12,7 +12,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,7 +28,8 @@ public class ACSRepository implements ACSRepositoryInterface {
     this.countyCodes = new HashMap<>();
   }
 
-  public void populateStateCodes() throws URISyntaxException, IOException, InterruptedException, JsonDataException {
+  public void populateStateCodes()
+      throws URISyntaxException, IOException, InterruptedException, JsonDataException {
 
     // Get JSON from API
     HttpRequest buildACSRequest =
@@ -84,7 +84,8 @@ public class ACSRepository implements ACSRepositoryInterface {
   }
 
   public List<String> fetch(String state, String county)
-      throws URISyntaxException, IOException, InterruptedException, JsonDataException, IllegalArgumentException {
+      throws URISyntaxException, IOException, InterruptedException, JsonDataException,
+          IllegalArgumentException {
 
     if (!statesPopulated) {
       populateStateCodes();

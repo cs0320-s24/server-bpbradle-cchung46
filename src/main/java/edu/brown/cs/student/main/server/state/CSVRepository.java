@@ -15,7 +15,8 @@ public class CSVRepository {
 
   public CSVRepository() {}
 
-  public void loadCSV(String filepath, String header) throws BadCSVException, FileNotFoundException {
+  public void loadCSV(String filepath, String header)
+      throws BadCSVException, FileNotFoundException {
     FileReader reader = new FileReader(filepath);
     RowCreator creator = new RowCreator();
 

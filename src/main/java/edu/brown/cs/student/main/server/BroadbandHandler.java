@@ -45,12 +45,10 @@ public class BroadbandHandler implements Route {
     } catch (URISyntaxException | IOException | InterruptedException e) {
       state.logError(e);
       return new FetchFailureResponse("error_datasource").serialize();
-    }
-    catch (JsonDataException e) {
+    } catch (JsonDataException e) {
       state.logError(e);
       return new FetchFailureResponse("error_bad_json").serialize();
-    }
-    catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       state.logError(e);
       return new FetchFailureResponse("error_bad_request").serialize();
     }

@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class ServerState {
@@ -51,7 +53,9 @@ public class ServerState {
       FileWriter fw = new FileWriter("errorlog.txt", true);
       pw = new PrintWriter(fw);
 
-      pw.write("ERROR: " + e.getMessage());
+      pw.write("ERROR: " + e.getMessage() + "\n");
+      pw.write("DATE: " + LocalDate.now().toString() + "\n");
+      pw.write("TIME: " + LocalTime.now().toString() + "\n");
       e.printStackTrace(pw);
     } catch (IOException except) {
       System.err.println("Failed to log error: " + except.getMessage());

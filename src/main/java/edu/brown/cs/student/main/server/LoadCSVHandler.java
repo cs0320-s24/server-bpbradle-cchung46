@@ -21,8 +21,9 @@ public class LoadCSVHandler implements Route {
   @Override
   public Object handle(Request request, Response response) {
     String filepath = request.queryParams("filepath");
+    String header = request.queryParams("header");
 
-    if (filepath == null) {
+    if (filepath == null || header == null) {
       return new LoadFailureResponse("error_bad_request").serialize();
     }
 
@@ -35,7 +36,7 @@ public class LoadCSVHandler implements Route {
     Map<String, Object> responseMap = new HashMap<>();
 
     try {
-      state.load(path);
+      state.load(path, header);
     } catch (BadCSVException | FileNotFoundException e) {
       state.logError(e);
       return new LoadFailureResponse("error_datasource").serialize();

@@ -42,6 +42,7 @@ public class LoadCSVHandler implements Route {
       return new LoadFailureResponse("error_datasource").serialize();
     }
 
+    responseMap.put("header", header);
     responseMap.put("filepath", path);
     return new LoadSuccessResponse(responseMap).serialize();
   }

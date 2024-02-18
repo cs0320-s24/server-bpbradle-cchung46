@@ -2,8 +2,10 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.main.server.state.ACSCachingRepository;
 import edu.brown.cs.student.main.server.state.ACSRepository;
 import edu.brown.cs.student.main.server.state.ServerState;
+import java.util.concurrent.TimeUnit;
 import spark.Spark;
 
 public class Server {
@@ -32,7 +34,10 @@ public class Server {
   }
 
   public static void main(String[] args) {
-    Server server = new Server(new ServerState(new ACSRepository()));
+    Server server =
+        new Server(
+            new ServerState(
+                new ACSCachingRepository(new ACSRepository(), 1000, 10, TimeUnit.MINUTES)));
     System.out.println("Server started at http://localhost:" + port);
   }
 }

@@ -11,10 +11,24 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provides a way to convert JSON strings into lists of state, county, and broadband data objects.
+ */
 public class ACSAPIUtilities {
 
+  /**
+   * Private constructor to prevent instantiation.
+   */
   private ACSAPIUtilities() {}
 
+  /**
+   * Convert a JSON string into a list of State objects.
+   * @param jsonList The JSON string representing a list of states, each state is expected
+   *                 to be a list with at least two elements: the state name and its code.
+   * @return A List of State objects converted from a JSON string.
+   * @throws IOException If an I/O error occurs during reading the JSON string.
+   * @throws JsonDataException If the JSON string does not match the expected format or structure.
+   */
   public static List<State> deserializeStates(String jsonList)
       throws IOException, JsonDataException {
 
@@ -39,6 +53,15 @@ public class ACSAPIUtilities {
     return deserializedStates;
   }
 
+  /**
+   * Converts a JSON string into a list of County objects.
+   * @param jsonList The JSON string representing a list of counties, each county is expected
+   *                 to be a list with at least three elements: the county name, state code,
+   *                 and the county code. The county name can include the state name, separated by a comma.
+   * @return A List of County objects converted from a JSON string.
+   * @throws IOException If an I/O error occurs during reading the JSON string.
+   * @throws JsonDataException If the JSON string does not match the expected format or structure.
+   */
   public static List<County> deserializeCounties(String jsonList)
       throws IOException, JsonDataException {
     List<County> deserializedCounties = new ArrayList<>();
@@ -64,6 +87,15 @@ public class ACSAPIUtilities {
     return deserializedCounties;
   }
 
+  /**
+   * Converts a JSON string into a list of lists, each containing broadband data as strings.
+   * Differs from previous deserialize methods by not mapping to a specific Object type.
+   * @param jsonList The JSON string representing a list of broadband data, with each
+   *                 item in the list expected to be another list of strings.
+   * @return A list of list of Strings, representing the deserialized broadband data.
+   * @throws IOException If an I/O error occurs during reading the JSON string.
+   * @throws JsonDataException If the JSON string does not match the expected format or structure.
+   */
   public static List<List<String>> deserializeBroadbandData(String jsonList)
       throws IOException, JsonDataException {
     List<List<String>> deserializedData = new ArrayList<>();

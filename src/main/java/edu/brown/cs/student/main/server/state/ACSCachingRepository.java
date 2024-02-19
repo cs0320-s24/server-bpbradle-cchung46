@@ -68,6 +68,11 @@ public class ACSCachingRepository implements ACSRepositoryInterface {
     return result;
   }
 
+  /**
+   * Accessor method for the caching stats used for testing
+   *
+   * @return the cache's stats
+   */
   public CacheStats getStats() {
     return cache.stats();
   }

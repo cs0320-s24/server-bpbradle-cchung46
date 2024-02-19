@@ -11,22 +11,41 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handles the LoadCSV endpoint. Calls state's load() function.
+ */
 public class LoadCSVHandler implements Route {
   private final ServerState state;
 
+  /**
+   * Stores the shared ServerState object
+   *
+   * @param state passed from Server, the shared ServerState object
+   */
   public LoadCSVHandler(ServerState state) {
     this.state = state;
   }
 
+  /**
+   * Handles the request itself. Code modeled from GearUp.
+   *
+   * @param request
+   * @param response
+   * @return success or failure response
+   */
   @Override
   public Object handle(Request request, Response response) {
+
+    // gets the filepath and header
     String filepath = request.queryParams("filepath");
     String header = request.queryParams("header");
 
+    // if either are null, return a bad request error response
     if (filepath == null || header == null) {
       return new LoadFailureResponse("error_bad_request").serialize();
     }
 
+    // if the file is outside the data directory, return a datasource error response
     if (filepath.matches(".*\\.\\./.*")) {
       return new LoadFailureResponse("error_datasource").serialize();
     }
@@ -35,6 +54,7 @@ public class LoadCSVHandler implements Route {
 
     Map<String, Object> responseMap = new HashMap<>();
 
+    // call state's load function and deal with the exceptions as necesssary
     try {
       state.load(path, header);
     } catch (BadCSVException | FileNotFoundException e) {

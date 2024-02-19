@@ -10,9 +10,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handles the ViewCSV endpoint. Calls state's view
+ *
+ */
 public class ViewCSVHandler implements Route {
   private final ServerState state;
 
+  // stores shared ServerState object.
   public ViewCSVHandler(ServerState state) {
     this.state = state;
   }
@@ -20,11 +25,13 @@ public class ViewCSVHandler implements Route {
   @Override
   public Object handle(Request request, Response response) {
 
+    // if no csv is loaded, return a bad datasource error response.
     if (!state.csvloaded) {
       state.logError(new FileNotFoundException("No CSV loaded."));
       return new ViewFailureResponse("error_datasource").serialize();
     }
 
+    // calls state's view() function and returns a success response. no failure response implemented.
     Map<String, Object> responseMap = new HashMap<>();
 
     responseMap.put("data", state.view());

@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * Class designed to handle searching through previously parsed CSV data.
  *
- * <p>Iterates through data and prints all rows to the terminal that match the search criteria if
- * found. Otherwise prints "No match found."
+ * <p>Iterates through data and returns all rows that match the search criteria if found.
  */
 public class Searcher {
   Parser<List<String>> parser;

@@ -12,10 +12,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handles the SearchCSV endpoint. Calls state's search() function.
+ */
 public class SearchCSVHandler implements Route {
 
   private final ServerState state;
 
+  // initializes shared ServerState object.
   public SearchCSVHandler(ServerState state) {
     this.state = state;
   }
@@ -23,18 +27,22 @@ public class SearchCSVHandler implements Route {
   @Override
   public Object handle(Request request, Response response) {
 
+    // if there is no csv loaded, return a datasource error response
     if (!state.csvloaded) {
       state.logError(new FileNotFoundException("No CSV loaded."));
       return new SearchFailureResponse("error_datasource").serialize();
     }
 
+    // get necessary parameters
     String val = request.queryParams("value");
     String colStr = request.queryParams("column");
 
+    // if no search value is given, return a bad request error response
     if (val == null) {
       return new SearchFailureResponse("error_bad_request").serialize();
     }
 
+    // determine if column identifier is an index or name
     Integer colInt = null;
     if (colStr != null) {
       try {
@@ -45,6 +53,7 @@ public class SearchCSVHandler implements Route {
 
     Map<String, Object> responseMap = new HashMap<>();
 
+    // call state's search function and store
     List<List<String>> matches;
     try {
       if (colStr != null) {
@@ -57,6 +66,7 @@ public class SearchCSVHandler implements Route {
         matches = state.search(val);
       }
 
+      // create a success or failure response and log errors as necesssary
       responseMap.put("data", matches);
     } catch (BadCSVException e) {
       state.logError(e);
